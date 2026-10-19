@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 240" width="360" height="240" role="img" aria-label="Página no encontrada">
+  <ellipse cx="180" cy="214" rx="140" ry="14" fill="#EAF6FC"/>
+  <path d="M180 214V92" stroke="#8BC34A" stroke-width="10" stroke-linecap="round"/>
+  <path d="M104 64H246L268 86L246 108H104A10 10 0 0 1 94 98V74A10 10 0 0 1 104 64Z" fill="#1565C0"/>
+  <text x="172" y="96" text-anchor="middle" font-family="Nunito, 'Segoe UI', sans-serif" font-size="30" font-weight="800" fill="#FFFFFF">404</text>
+  <path d="M256 128H134L114 148L134 168H256A10 10 0 0 0 266 158V138A10 10 0 0 0 256 128Z" fill="#BFE3F6"/>
+  <path d="M146 148H232" stroke="#FFFFFF" stroke-width="8" stroke-linecap="round"/>
+  <path d="M70 168C78 178 82 184 82 190A12 12 0 1 1 58 190C58 184 62 178 70 168Z" fill="#29A9E1"/>
+  <path d="M296 156C302 164 305 168 305 173A9 9 0 1 1 287 173C287 168 290 164 296 156Z" fill="#7FCDF2"/>
+</svg>

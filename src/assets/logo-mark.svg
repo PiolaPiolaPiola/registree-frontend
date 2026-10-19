@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" role="img" aria-label="Registree">
+  <defs>
+    <path id="drop" d="M0 -6.5C2.8 -2.8 4.6 0 4.6 2.6A4.6 4.6 0 1 1 -4.6 2.6C-4.6 0 -2.8 -2.8 0 -6.5Z"/>
+  </defs>
+  <path d="M31 61C32 50 30 42 24 36M30.5 47C35 41 41 38 46 32" fill="none" stroke="#8BC34A" stroke-width="5.5" stroke-linecap="round"/>
+  <g fill="#29A9E1">
+    <use href="#drop" x="11" y="28"/>
+    <use href="#drop" x="20" y="18"/>
+    <use href="#drop" x="42" y="15"/>
+    <use href="#drop" x="53" y="26"/>
+    <use href="#drop" x="25" y="29"/>
+  </g>
+  <g fill="#1565C0">
+    <use href="#drop" x="31" y="11"/>
+    <use href="#drop" x="47" y="35"/>
+    <use href="#drop" x="16" y="38"/>
+  </g>
+  <g fill="#7FCDF2">
+    <use href="#drop" x="35" y="24"/>
+    <use href="#drop" x="56" y="40"/>
+  </g>
+</svg>

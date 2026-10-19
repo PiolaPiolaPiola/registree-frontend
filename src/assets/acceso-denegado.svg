@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 240" width="360" height="240" role="img" aria-label="Acceso no permitido">
+  <ellipse cx="180" cy="214" rx="140" ry="14" fill="#EAF6FC"/>
+  <path d="M180 214V100" stroke="#8BC34A" stroke-width="10" stroke-linecap="round"/>
+  <path d="M104 64H246L268 86L246 108H104A10 10 0 0 1 94 98V74A10 10 0 0 1 104 64Z" fill="#1565C0"/>
+  <text x="172" y="96" text-anchor="middle" font-family="Nunito, 'Segoe UI', sans-serif" font-size="30" font-weight="800" fill="#FFFFFF">403</text>
+  <path d="M158 150V136A22 22 0 0 1 202 136V150" fill="none" stroke="#BFE3F6" stroke-width="10" stroke-linecap="round"/>
+  <rect x="146" y="146" width="68" height="54" rx="12" fill="#29A9E1"/>
+  <circle cx="180" cy="168" r="7" fill="#FFFFFF"/>
+  <path d="M180 172V184" stroke="#FFFFFF" stroke-width="6" stroke-linecap="round"/>
+  <path d="M70 168C78 178 82 184 82 190A12 12 0 1 1 58 190C58 184 62 178 70 168Z" fill="#29A9E1"/>
+  <path d="M296 156C302 164 305 168 305 173A9 9 0 1 1 287 173C287 168 290 164 296 156Z" fill="#7FCDF2"/>
+</svg>

@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" role="img" aria-label="Cargando">
+  <style>
+    .d{animation:pulse 1.2s ease-in-out infinite;transform-box:fill-box;transform-origin:center}
+    .d2{animation-delay:.15s}.d3{animation-delay:.3s}.d4{animation-delay:.45s}
+    .d5{animation-delay:.6s}.d6{animation-delay:.75s}.d7{animation-delay:.9s}.d8{animation-delay:1.05s}
+    @keyframes pulse{0%,100%{opacity:.25;transform:scale(.75)}40%{opacity:1;transform:scale(1)}}
+    @media (prefers-reduced-motion:reduce){.d{animation:none;opacity:.8}}
+  </style>
+  <defs>
+    <path id="drop" d="M0 -6C2.6 -2.6 4.2 0 4.2 2.4A4.2 4.2 0 1 1 -4.2 2.4C-4.2 0 -2.6 -2.6 0 -6Z"/>
+  </defs>
+  <g fill="#29A9E1">
+    <use class="d" href="#drop" x="32" y="9"/>
+    <use class="d d2" href="#drop" x="48.3" y="15.7" fill="#1565C0"/>
+    <use class="d d3" href="#drop" x="55" y="32"/>
+    <use class="d d4" href="#drop" x="48.3" y="48.3" fill="#1565C0"/>
+    <use class="d d5" href="#drop" x="32" y="55"/>
+    <use class="d d6" href="#drop" x="15.7" y="48.3" fill="#1565C0"/>
+    <use class="d d7" href="#drop" x="9" y="32"/>
+    <use class="d d8" href="#drop" x="15.7" y="15.7" fill="#8BC34A"/>
+  </g>
+</svg>
