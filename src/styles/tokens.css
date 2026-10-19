@@ -7,4 +7,6 @@
   --rg-shadow-button: 0 8px 18px rgba(21, 101, 192, 0.22);
   --rg-radius-xl: 24px;
   --rg-shadow-floating: 0 12px 28px rgba(15, 42, 68, 0.18);
+  --rg-sidebar-width: 256px;
+  --rg-sidebar-width-collapsed: 84px;
 }

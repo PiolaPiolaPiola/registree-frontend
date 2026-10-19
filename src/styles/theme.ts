@@ -58,5 +58,6 @@ export const theme = createTheme({
       },
     },
     MuiDialog: { styleOverrides: { paper: { borderRadius: 'var(--rg-radius-xl)' } } },
+    MuiIconButton: { styleOverrides: { root: { borderRadius: 'var(--rg-radius-md)' } } },
   },
 });
