@@ -131,3 +131,10 @@ src/
 * **Confirmación:** `ConfirmDialog`, un modal de confirmación reutilizable al estilo Sweet Alert para acciones como eliminar un producto o inactivar un usuario.
 * **Estados:** `StatusView` muestra imagenespor defecto para estados vacíos, la página 404 y el acceso no permitido. `FullScreenLoader` muestra el spinner mientras se carga.
 * **Indicadores de carga:** en local la API responde tan rápido que los spinners casi no se ven. Para revisarlos, define `VITE_API_DELAY_MS=1500` en el `.env` y reinicia `npm run dev`. Probar recardando la página
+
+## Layout
+
+* Menú lateral con las secciones disponibles según el rol. Usuarios solo lo ve ADMIN.
+* El menú se puede **fijar abierto** o dejar contraídocon solo los íconos. Contraído, se expande al pasar el mouse o al navegar con el teclado, sin mover el contenido. La preferencia se recuerda en el navegador.
+* En celular, el menú se abre como panel desde el botón del header.
+* El header muestra el usuario, su rol y la opción de cerrar sesión.
