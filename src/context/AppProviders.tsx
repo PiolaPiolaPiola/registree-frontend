@@ -5,6 +5,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import 'dayjs/locale/es';
 import { theme } from '../styles/theme';
 import { AuthProvider } from './AuthProvider.tsx';
+import { ToastProvider } from './ToastProvider';
 
 interface AppProvidersProps {
   children: ReactNode;
@@ -15,7 +16,9 @@ export const AppProviders = ({ children }: AppProvidersProps) => (
   <ThemeProvider theme={theme}>
     <CssBaseline />
     <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="es">
-      <AuthProvider>{children}</AuthProvider>
+        <ToastProvider>
+          <AuthProvider>{children}</AuthProvider>
+        </ToastProvider>
     </LocalizationProvider>
   </ThemeProvider>
 );

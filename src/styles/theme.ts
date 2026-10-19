@@ -57,5 +57,6 @@ export const theme = createTheme({
         },
       },
     },
+    MuiDialog: { styleOverrides: { paper: { borderRadius: 'var(--rg-radius-xl)' } } },
   },
 });

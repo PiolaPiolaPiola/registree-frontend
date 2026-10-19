@@ -16,6 +16,14 @@ export const http = axios.create({
   headers: { 'Content-Type': 'application/json' },
 });
 
+// Solo aplica en desarrollo y si VITE_API_DELAY_MS está definida, retrasa las peticiones para ver los spinners
+if (env.apiDelayMs > 0) {
+  http.interceptors.request.use(async (config) => {
+    await new Promise((resolve) => window.setTimeout(resolve, env.apiDelayMs));
+    return config;
+  });
+}
+
 // Agrega el token a cada petición
 http.interceptors.request.use((config) => {
   const token = tokenStorage.get();
