@@ -92,3 +92,10 @@ src/
 
 * El tema de MUI (`src/styles/theme.ts`) define la paleta, la tipografía (Nunito) y los estilos base de los componentes. Con `cssVariables` estos se usan como variables CSS (`--mui-palette-primary-main`, `--mui-font-h1`.).
 * Los tokens propios de la aplicación (radios, bordes, sombras y anchos del menú lateral) están en `src/styles/tokens.css` con el prefijo `--rg-`.
+
+## Consumo de la API
+
+* Todas las peticiones pasan por una instancia única de Axios (`src/api/http-client.ts`), que toma la URL de `VITE_API_URL`, agrega el token de sesión y estandariza los errores.
+* Hay un archivo por recurso (`auth.api.ts`, `products.api.ts`, `users.api.ts`) con funciones tipadas que devuelven directamente los datos.
+* Si el backend responde `401` (token inválido o expirado), la sesión se cierra y se redirige al login.
+* Si la API no está disponible, se muestra un mensaje y no se rompe la app
