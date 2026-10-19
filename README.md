@@ -105,3 +105,15 @@ src/
 * La sesión se maneja con un Context de React (`AuthProvider`) que guarda el usuario autenticado y su rol durante toda la aplicación. Se accede con el hook `useAuth`.
 * El token se guarda en `localStorage` para mantener la sesión al recargar la página. Al abrir la app, el token se valida con `GET /auth/me`, que devuelve los datos actualizados del usuario.
 * Si el token expira o el usuario es inactivado, la siguiente petición responde `401` y la sesión se cierra automáticamente.
+
+## Rutas
+
+| Ruta | Acceso |
+|---|---|
+| `/login` | Solo sin sesión (con sesión redirige al dashboard) |
+| `/` | Dashboard. Requiere sesión |
+| `/inventario` | Requiere sesión |
+| `/usuarios` | Requiere sesión y rol `ADMIN` |
+
+* Sin sesión, cualquier ruta (incluso una inexistente) redirige al login. Después de iniciar sesión, se vuelve a la ruta anterior.
+* Con sesión, una ruta inexistente muestra una página 404. Sin permisos, una página 403.
