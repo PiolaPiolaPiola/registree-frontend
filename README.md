@@ -44,7 +44,6 @@ La aplicación queda disponible en `http://localhost:5173`.
 npm run build
 npm run preview
 ```
-
 ---
 
 ## Stack tecnológico
@@ -80,3 +79,16 @@ src/
 ├── assets/       # Imágenes e ilustraciones SVG
 └── utils/        # Utilidades compartidas
 ```
+
+---
+
+## Diseño UI
+
+* Se exploraron propuestas de interfaz con Figma y Lovable, y finalmente se eligió un diseño base generado con Claude, que se ajustaba mejor a los requisitos y permitía utilizar MUI.
+* **Colores:** inspirados en la paleta de tree-a Enterprises S.A.S.
+* **Inspiración:** Sortly para el diseño de la tabla de inventario y Zoho para los paneles del dashboard.
+
+## Estilos
+
+* El tema de MUI (`src/styles/theme.ts`) define la paleta, la tipografía (Nunito) y los estilos base de los componentes. Con `cssVariables` estos se usan como variables CSS (`--mui-palette-primary-main`, `--mui-font-h1`.).
+* Los tokens propios de la aplicación (radios, bordes, sombras y anchos del menú lateral) están en `src/styles/tokens.css` con el prefijo `--rg-`.
