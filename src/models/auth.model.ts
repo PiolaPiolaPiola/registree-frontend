@@ -1,4 +1,4 @@
-import type { User, UserRole } from './user.model';
+import type { User } from './user.model';
 
 export interface LoginDTO {
   email: string;
@@ -10,7 +10,7 @@ export interface LoginResponse {
   user: User;
 }
 
-export interface AuthMe { //Para consultar persona autenticada
-  sub: string;
-  role: UserRole;
-}
+// export interface AuthMe { //Para consultar persona autenticada
+//   sub: string;
+//   role: UserRole;
+// }
