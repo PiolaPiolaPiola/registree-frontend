@@ -1,11 +1,7 @@
-import { Stack, Typography } from '@mui/material';
+import { AppRouter } from './routes/AppRouter';
 
 function App() {
-  return (
-    <Stack spacing={3} sx={{ p: 4, maxWidth: 720 }}>
-      <Typography variant="h1">Registree</Typography>
-    </Stack>
-  );
+  return <AppRouter />;
 }
 
 export default App;
