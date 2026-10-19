@@ -1,0 +1,8 @@
+:root {
+  --rg-radius-sm: 10px;
+  --rg-radius-md: 12px;
+  --rg-radius-lg: 18px;
+  --rg-border: 1.5px solid var(--mui-palette-divider);
+  --rg-shadow-card: 0 6px 20px rgba(21, 101, 192, 0.07);
+  --rg-shadow-button: 0 8px 18px rgba(21, 101, 192, 0.22);
+}
