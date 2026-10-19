@@ -34,3 +34,8 @@ export interface ProductFilters extends Partial<PaginationParams> {
   from?: string;
   to?: string;
 }
+
+export interface DeleteProductResponse {
+  message: string;
+  product: Product;
+}
