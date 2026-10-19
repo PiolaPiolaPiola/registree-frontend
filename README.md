@@ -16,6 +16,7 @@ Aplicación web de **Registree**: dashboard gerencial de inventario, desarrollad
 | Variable | Descripción | Valor de ejemplo |
 |---|---|---|
 | `VITE_API_URL` | URL base de la API del backend | `http://localhost:3000/api` |
+| `VITE_API_DELAY_MS` | Opcional, solo en desarrollo. Retrasa las peticiones (en ms) para ver los indicadores de carga | `1500` |
 
 ---
 
@@ -123,3 +124,10 @@ src/
 * Los formularios usan **React Hook Form** con **Zod** (`src/schemas/`), y validan en tiempo real mientras el usuario escribe (zod).
 * Las reglas de validación son las mismas de los schemas de backend, para que ambos acepten exactamente los mismos datos.
 * Los campos reutilizables (`FormTextField`, `FormPasswordField`) conectan los componentes de MUI con el formulario y muestran los errores debajo de cada campo.
+
+## Feedback al usuario
+
+* **Notificaciones (toast):** componente propio (`ToastProvider` + hook `useToast`) para mensajes de éxito, error e información. Se acumulan máximo 3 y se cierran solas.
+* **Confirmación:** `ConfirmDialog`, un modal de confirmación reutilizable al estilo Sweet Alert para acciones como eliminar un producto o inactivar un usuario.
+* **Estados:** `StatusView` muestra imagenespor defecto para estados vacíos, la página 404 y el acceso no permitido. `FullScreenLoader` muestra el spinner mientras se carga.
+* **Indicadores de carga:** en local la API responde tan rápido que los spinners casi no se ven. Para revisarlos, define `VITE_API_DELAY_MS=1500` en el `.env` y reinicia `npm run dev`. Probar recardando la página
