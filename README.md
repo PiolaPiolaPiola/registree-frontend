@@ -117,3 +117,9 @@ src/
 
 * Sin sesión, cualquier ruta (incluso una inexistente) redirige al login. Después de iniciar sesión, se vuelve a la ruta anterior.
 * Con sesión, una ruta inexistente muestra una página 404. Sin permisos, una página 403.
+
+## Formularios y validaciones
+
+* Los formularios usan **React Hook Form** con **Zod** (`src/schemas/`), y validan en tiempo real mientras el usuario escribe (zod).
+* Las reglas de validación son las mismas de los schemas de backend, para que ambos acepten exactamente los mismos datos.
+* Los campos reutilizables (`FormTextField`, `FormPasswordField`) conectan los componentes de MUI con el formulario y muestran los errores debajo de cada campo.
