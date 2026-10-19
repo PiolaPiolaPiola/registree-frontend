@@ -99,3 +99,9 @@ src/
 * Hay un archivo por recurso (`auth.api.ts`, `products.api.ts`, `users.api.ts`) con funciones tipadas que devuelven directamente los datos.
 * Si el backend responde `401` (token inválido o expirado), la sesión se cierra y se redirige al login.
 * Si la API no está disponible, se muestra un mensaje y no se rompe la app
+
+## Sesión
+
+* La sesión se maneja con un Context de React (`AuthProvider`) que guarda el usuario autenticado y su rol durante toda la aplicación. Se accede con el hook `useAuth`.
+* El token se guarda en `localStorage` para mantener la sesión al recargar la página. Al abrir la app, el token se valida con `GET /auth/me`, que devuelve los datos actualizados del usuario.
+* Si el token expira o el usuario es inactivado, la siguiente petición responde `401` y la sesión se cierra automáticamente.
