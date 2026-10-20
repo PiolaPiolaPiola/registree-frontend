@@ -11,6 +11,8 @@ interface FormDialogProps {
   submitting?: boolean;
   /** Deshabilita el botón principal. Para usar durante una petición*/
   submitDisabled?: boolean;
+  /** Solo lectura, para la vista de detalle*/
+  readOnly?: boolean;
   onClose: () => void;
   onSubmit: FormEventHandler<HTMLFormElement>;
   children: ReactNode;
@@ -25,6 +27,7 @@ export const FormDialog = ({
   submitLabel,
   submitting = false,
   submitDisabled = false,
+  readOnly = false,
   onClose,
   onSubmit,
   children,
@@ -45,12 +48,14 @@ export const FormDialog = ({
       </DialogTitle>
       <DialogContent dividers>{children}</DialogContent>
       <DialogActions sx={{ px: 3, py: 2 }}>
-        <Button variant="text" color="inherit" onClick={onClose} disabled={submitting}>
-          Cancelar
+        <Button variant={readOnly ? 'contained' : 'text'} color={readOnly ? 'primary' : 'inherit'} onClick={onClose} disabled={submitting}>
+          {readOnly ? 'Cerrar' : 'Cancelar'}
         </Button>
-        <Button type="submit" variant="contained" disabled={submitting || submitDisabled}>
-          {submitting ? 'Guardando…' : submitLabel}
-        </Button>
+        {!readOnly && (
+          <Button type="submit" variant="contained" disabled={submitting || submitDisabled}>
+            {submitting ? 'Guardando…' : submitLabel}
+          </Button>
+        )}
       </DialogActions>
     </Box>
   </Dialog>

@@ -58,6 +58,7 @@ export const LoginView = () => {
               label="Correo electrónico"
               type="email"
               autoComplete="email"
+              required
               autoFocus
             />
             <FormPasswordField<LoginFormValues>
@@ -65,6 +66,7 @@ export const LoginView = () => {
               control={control}
               label="Contraseña"
               autoComplete="current-password"
+              required
             />
             <Button type="submit" variant="contained" size="large" disabled={isSubmitting}>
               {isSubmitting ? 'Cargando…' : 'Ingresar'}

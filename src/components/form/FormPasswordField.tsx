@@ -9,10 +9,12 @@ interface FormPasswordFieldProps<T extends FieldValues> {
   control: Control<T>;
   label: string;
   autoComplete?: string;
+  /** para mostrar el asterisco de campo obligatorio */
+  required?: boolean;
 }
 
 /** Campo de contraseña con botón para mostrar u ocultar el texto */
-export const FormPasswordField = <T extends FieldValues>({ name, control, label, autoComplete }: FormPasswordFieldProps<T>) => {
+export const FormPasswordField = <T extends FieldValues>({ name, control, label, autoComplete, required }: FormPasswordFieldProps<T>) => {
   const [visible, setVisible] = useState(false);
 
   return (
@@ -20,6 +22,7 @@ export const FormPasswordField = <T extends FieldValues>({ name, control, label,
       name={name}
       control={control}
       label={label}
+      required={required}
       type={visible ? 'text' : 'password'}
       autoComplete={autoComplete}
       slotProps={{

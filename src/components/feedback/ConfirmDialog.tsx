@@ -9,6 +9,7 @@ interface ConfirmDialogProps {
   confirmLabel?: string;
   cancelLabel?: string;
   tone?: 'danger' | 'primary';
+  icon?: ReactNode;
   loading?: boolean;
   onConfirm: () => void;
   onCancel: () => void;
@@ -22,12 +23,13 @@ export const ConfirmDialog = ({
   confirmLabel = 'Confirmar',
   cancelLabel = 'Cancelar',
   tone = 'primary',
+  icon,
   loading = false,
   onConfirm,
   onCancel,
 }: ConfirmDialogProps) => {
   const isDanger = tone === 'danger';
-  const Icon = isDanger ? DeleteOutlined : HelpOutlined;
+  const DefaultIcon = isDanger ? DeleteOutlined : HelpOutlined;
 
   return (
     <Dialog
@@ -51,7 +53,7 @@ export const ConfirmDialog = ({
             color: isDanger ? 'error.main' : 'primary.main',
           }}
         >
-          <Icon sx={{ fontSize: 40 }} aria-hidden />
+          {icon ?? <DefaultIcon sx={{ fontSize: 40 }} aria-hidden />}
         </Box>
         <Typography id="confirm-dialog-title" variant="h2">
           {title}
