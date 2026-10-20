@@ -16,10 +16,11 @@ import chartsEmptyImage from '../assets/graficos-vacio.svg';
 import inventoryEmptyImage from '../assets/inventario-vacio.svg';
 import { CategoryDonutChart } from '../components/dashboard/charts/CategoryDonutChart';
 import { TopPricesBarChart } from '../components/dashboard/charts/TopPricesBarChart';
+import { DataTable } from '../components/table/DataTable';
+import { RECENT_PRODUCT_COLUMNS } from '../components/products/product-columns';
 
 export const DashboardView = () => {
-  const { metrics, topExpensive, status, isRefreshing, error, lastUpdated, refresh } = useDashboardMetrics();
-  const [expandedId, setExpandedId] = useState<DashboardCardId | null>(null);
+  const { metrics, topExpensive, recentProducts, status, isRefreshing, error, lastUpdated, refresh } = useDashboardMetrics();  const [expandedId, setExpandedId] = useState<DashboardCardId | null>(null);
 
   const toggleCard = (id: DashboardCardId) => setExpandedId((current) => (current === id ? null : id));
 
@@ -164,6 +165,18 @@ export const DashboardView = () => {
                 height={expandedId === 'topPrices' ? 360 : 240}
                 compact={expandedId !== null && expandedId !== 'topPrices'}
             />
+        </ExpandableCard>
+        <ExpandableCard
+          title="Actividad reciente"
+          subtitle="Últimos 5 productos creados"
+          sx={getCardGridSx('recentActivity', expandedId)}
+        >
+          <DataTable
+            ariaLabel="Últimos productos creados"
+            columns={RECENT_PRODUCT_COLUMNS}
+            rows={recentProducts}
+            getRowId={(product) => product._id}
+          />
         </ExpandableCard>
       </Box>
     </>

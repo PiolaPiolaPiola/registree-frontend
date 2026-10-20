@@ -21,7 +21,9 @@ const DEFAULT_COLUMNS: Record<DashboardCardId, number> = {
 
 /** Cambia dinámicamente la posición de la card según si está expandida o no., También cambia el tamaño de columnas, para el efecto*/
 export const getCardGridSx = (id: DashboardCardId, expandedId: DashboardCardId | null): SxProps<Theme> => {
-  if (expandedId === id) {
+    if (id === 'recentActivity') return { gridColumn: '1 / -1' };//Ocupa todo el ancho siempre
+  
+    if (expandedId === id) {
     return { gridColumn: { md: 'span 2' }, gridRow: { md: 'span 2' }, order: { md: -1 } };
   }
   return { gridColumn: { md: `span ${expandedId ? 1 : DEFAULT_COLUMNS[id]}` } };

@@ -147,3 +147,4 @@ src/
 * Las métricas se calculan en `src/services/metrics.service.ts` con `reduce`, `map`, `filter` y `sort`, como funciones puras y sin filtrado desde bd.
 * El **valor total del inventario** es la suma de `precio × stock` de cada producto, calculada con `decimal.js` para evitar errores de precisión con los centavos.
 * Los gráficos usan **Recharts**: una dona con la proporción de productos por categoría y barras con el top 5 de productos más caros. Los colores están validados para daltonismo
+* La actividad reciente usa `DataTable`, la tabla genérica del proyecto: recibe columnas, acciones y paginación como props, y la reutilizan el dashboard, el inventario y la administración de usuarios. Siempre reserva el alto de 5 filas para que el diseño no salte.
