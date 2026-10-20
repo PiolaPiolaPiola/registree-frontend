@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 220" width="320" height="220" role="img" aria-label="Aún no hay productos">
+  <defs>
+    <path id="drop" d="M0 -9C4 -4 6.4 0 6.4 3.6A6.4 6.4 0 1 1 -6.4 3.6C-6.4 0 -4 -4 0 -9Z"/>
+  </defs>
+  <ellipse cx="160" cy="196" rx="120" ry="12" fill="#EAF6FC"/>
+  <path d="M96 118H224V186A10 10 0 0 1 214 196H106A10 10 0 0 1 96 186Z" fill="#FFFFFF" stroke="#BFE3F6" stroke-width="4" stroke-linejoin="round"/>
+  <path d="M96 118L72 96H200L224 118" fill="#EAF6FC" stroke="#BFE3F6" stroke-width="4" stroke-linejoin="round"/>
+  <path d="M224 118L248 96H200" fill="#EAF6FC" stroke="#BFE3F6" stroke-width="4" stroke-linejoin="round"/>
+  <path d="M160 150C160 132 156 122 148 112M158 128C164 120 172 116 178 112" fill="none" stroke="#8BC34A" stroke-width="5" stroke-linecap="round"/>
+  <path d="M148 112C140 112 134 106 134 98C142 98 148 104 148 112Z" fill="#8BC34A"/>
+  <path d="M178 112C186 112 192 106 192 98C184 98 178 104 178 112Z" fill="#AED581"/>
+  <g fill="#29A9E1"><use href="#drop" x="120" y="54"/><use href="#drop" x="206" y="44"/></g>
+  <g fill="#7FCDF2"><use href="#drop" x="160" y="34"/><use href="#drop" x="236" y="70"/></g>
+  <g fill="#1565C0"><use href="#drop" x="88" y="74"/></g>
+</svg>

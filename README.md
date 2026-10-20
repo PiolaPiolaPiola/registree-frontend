@@ -144,3 +144,5 @@ src/
 * Un proveedor (`ProductsDataProvider`) carga **una sola vez** todos los productos activos al entrar a la aplicación, recorriendo las páginas del listado en paralelo.
 * Todas las métricas y gráficos del dashboard se calculan a partir de esa caché, sin hacer una petición por gráfico.
 * Después de crear, editar o eliminar un producto, la caché se actualiza. Si la actualización falla, se conservan los datos anteriores.
+* Las métricas se calculan en `src/services/metrics.service.ts` con `reduce`, `map`, `filter` y `sort`, como funciones puras y sin filtrado desde bd.
+* El **valor total del inventario** es la suma de `precio × stock` de cada producto, calculada con `decimal.js` para evitar errores de precisión con los centavos.
