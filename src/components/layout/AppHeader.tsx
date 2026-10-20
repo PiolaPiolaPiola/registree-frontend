@@ -59,7 +59,7 @@ export const AppHeader = ({ onOpenMenu }: AppHeaderProps) => {
           <Box sx={profileSx}>{profile}</Box>
         ))}
 
-      <Button variant="outlined" startIcon={<LogoutOutlined />} onClick={logout}>
+      <Button variant="outlined" startIcon={<LogoutOutlined />} onClick={() => logout()}>
         Cerrar sesión
       </Button>
     </Box>

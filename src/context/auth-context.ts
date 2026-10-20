@@ -12,7 +12,9 @@ export interface AuthContextValue {
   login: (dto: LoginDTO) => Promise<void>;
   /** Crea la cuenta como USER por defecto e inicia sesión*/
   register: (dto: RegisterDTO) => Promise<void>;
-  logout: () => void;
+  logout: (byUser?: boolean) => void;
+  /** true si la sesión la cerró el usuario,el login no debe volver a la ruta anterior*/
+  sessionEndedByUser: boolean;
 }
 
 export const AuthContext = createContext<AuthContextValue | null>(null);

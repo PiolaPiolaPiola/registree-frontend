@@ -13,15 +13,17 @@ interface AuthProviderProps {
 /**Para mantener la sesión viva*/
 export const AuthProvider = ({ children }: AuthProviderProps) => {
   const [user, setUser] = useState<User | null>(null);
+  const [sessionEndedByUser, setSessionEndedByUser] = useState(false);
   const [status, setStatus] = useState<AuthStatus>(() =>
     tokenStorage.get() ? 'checking' : 'unauthenticated',
   );
 
   /** Limpia la sesión*/
-  const logout = useCallback(() => {
+  const logout = useCallback((byUser = true) => {
     tokenStorage.clear();
     setUser(null);
     setStatus('unauthenticated');
+    setSessionEndedByUser(byUser);
   }, []);
 
   /** Guarda el token y el usuario que devuelven el login y el registro */
@@ -29,6 +31,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     tokenStorage.set(token);
     setUser(loggedUser);
     setStatus('authenticated');
+    setSessionEndedByUser(false);
   }, []);
 
   /** Valida las credenciales, guarda el token y el usuario*/
@@ -38,7 +41,8 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   const register = useCallback(async (dto: RegisterDTO) => startSession(await authApi.register(dto)), [startSession]);
 
   useEffect(() => {
-    setUnauthorizedHandler(logout);
+    // Token vencido o usuario inactivado, se guarda la ruta para volver a ella después de iniciar sesión
+    setUnauthorizedHandler(() => logout(false));
     return () => setUnauthorizedHandler(null);
   }, [logout]);
 
@@ -65,8 +69,8 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   }, []);
 
   const value = useMemo<AuthContextValue>(
-    () => ({ user, status, isAdmin: user?.role === 'ADMIN', login, register, logout }),
-    [user, status, login, register, logout],
+    () => ({ user, status, isAdmin: user?.role === 'ADMIN', login, register, logout, sessionEndedByUser }),
+    [user, status, login, register, logout, sessionEndedByUser],
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

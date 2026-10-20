@@ -21,7 +21,7 @@ const getRedirectPath = (state: unknown): string => {
  * - public: con sesión redirige a la ruta anterior o al dashboard.
  */
 export const AuthRoute = ({ access }: AuthRouteProps) => {
-  const { status } = useAuth();
+  const { status, sessionEndedByUser } = useAuth();
   const location = useLocation();
 
   if (status === 'checking') {
@@ -29,7 +29,8 @@ export const AuthRoute = ({ access }: AuthRouteProps) => {
   }
 
   if (access === 'private' && status === 'unauthenticated') {
-    return <Navigate to={PATHS.login} replace state={{ from: location.pathname }} />;
+    // Si el usuario cerró sesión, no se guarda la ruta. Si vuelve a entrar, va hacia el dashboard
+    return <Navigate to={PATHS.login} replace state={sessionEndedByUser ? undefined : { from: location.pathname }} />;
   }
 
   if (access === 'public' && status === 'authenticated') {
