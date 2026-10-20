@@ -138,3 +138,9 @@ src/
 * El menú se puede **fijar abierto** o dejar contraídocon solo los íconos. Contraído, se expande al pasar el mouse o al navegar con el teclado, sin mover el contenido. La preferencia se recuerda en el navegador.
 * En celular, el menú se abre como panel desde el botón del header.
 * El header muestra el usuario, su rol y la opción de cerrar sesión.
+
+## Datos compartidos del dashboard
+
+* Un proveedor (`ProductsDataProvider`) carga **una sola vez** todos los productos activos al entrar a la aplicación, recorriendo las páginas del listado en paralelo.
+* Todas las métricas y gráficos del dashboard se calculan a partir de esa caché, sin hacer una petición por gráfico.
+* Después de crear, editar o eliminar un producto, la caché se actualiza. Si la actualización falla, se conservan los datos anteriores.
