@@ -6,6 +6,7 @@ import { NotFoundView } from '../views/NotFoundView';
 import { PlaceholderView } from '../views/PlaceholderView';
 import { AuthRoute } from './AuthRoute';
 import { AppLayout } from '../components/layout/AppLayout';
+import { DashboardView } from '../views/DashboardView';
 
 export const AppRouter = () => (
   <BrowserRouter>
@@ -16,7 +17,7 @@ export const AppRouter = () => (
 
       <Route element={<AuthRoute access="private" />}>
         <Route element={<AppLayout />}>
-            <Route path={PATHS.dashboard} element={<PlaceholderView title="Dashboard" />} />
+            <Route path={PATHS.dashboard} element={<DashboardView />} />
             <Route path={PATHS.inventory} element={<PlaceholderView title="Inventario" />} />
             <Route element={<RoleRoute allowedRoles={['ADMIN']} />}>
             <Route path={PATHS.users} element={<PlaceholderView title="Usuarios" />} />

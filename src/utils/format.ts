@@ -23,3 +23,6 @@ export const formatCurrency = (value: number): string =>
 export const formatNumber = (value: number): string => numberFormatter.format(value);
 
 export const formatDate = (isoDate: string): string => dayjs(isoDate).locale('es').format('DD MMM YYYY');
+
+/** Hora corta en español: "10:24 a. m." */
+export const formatTime = (date: Date): string => dayjs(date).locale('es').format('h:mm a');
