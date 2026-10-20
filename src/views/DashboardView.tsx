@@ -72,6 +72,15 @@ export const DashboardView = () => {
           <Stack direction="row" spacing={1} sx={{ alignItems: 'center' }}>
             {isRefreshing ? (
               <Chip label="Actualizando…" size="small" color="secondary" variant="outlined" />
+            ) : error ? (
+              // Si falló la recarga, sale alerta pero no se pone blanca la vista
+              <Chip
+                label={lastUpdated ? `Sin conexión · datos de las ${formatTime(lastUpdated)}` : 'Sin conexión'}
+                size="small"
+                color="warning"
+                variant="outlined"
+                sx={{ fontWeight: 700, color: 'warning.dark' }}
+              />
             ) : (
               lastUpdated && <Typography variant="body2">Actualizado {formatTime(lastUpdated)}</Typography>
             )}
