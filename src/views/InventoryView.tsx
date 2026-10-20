@@ -1,10 +1,12 @@
+import { useMemo, useState } from 'react';
 import { Button, Card } from '@mui/material';
-import { DeleteOutlined } from '@mui/icons-material';
+import { AddRounded, DeleteOutlined, EditOutlined } from '@mui/icons-material';
 import { PageHeader } from '../components/layout/PageHeader';
 import { StatusView } from '../components/feedback/StatusView';
 import { ConfirmDialog } from '../components/feedback/ConfirmDialog';
 import { DataTable } from '../components/table/DataTable';
 import { ProductFiltersBar } from '../components/products/ProductFiltersBar';
+import { ProductFormDialog } from '../components/products/ProductFormDialog';
 import { INVENTORY_PRODUCT_COLUMNS } from '../components/products/product-columns';
 import type { RowAction } from '../components/table/table.types';
 import type { Product } from '../models/product.model';
@@ -18,9 +20,24 @@ import noResultsImage from '../assets/sin-resultados.svg';
 
 export const InventoryView = () => {
   const { isAdmin } = useAuth();
-  const { refresh: refreshDashboard } = useProductsData();
+  const { products: cachedProducts, refresh: refreshDashboard } = useProductsData();
   const inventory = useInventory();
   const { rows, total, pagination, filters } = inventory;
+  /** null: modal cerrado. productId null: crear; con id: editar */
+  const [formTarget, setFormTarget] = useState<{ productId: string | null } | null>(null);
+
+  /** Categorías existentes (sin repetir) para sugerirlas en el formulario */
+  const categories = useMemo(
+    () => [...new Set(cachedProducts.map((product) => product.category))].sort((a, b) => a.localeCompare(b, 'es')),
+    [cachedProducts],
+  );
+
+  /** Después de crear o editar: se cierra el modal y se actualizan el listado y el dashboard */
+  const handleSaved = () => {
+    setFormTarget(null);
+    inventory.reload();
+    refreshDashboard();
+  };
 
   /** Después de eliminar, si era el último de la página, se vuelve a la anterior; también se actualiza el dashboard */
   const handleDeleted = () => {
@@ -36,6 +53,7 @@ export const InventoryView = () => {
 
   /** Solo ADMIN ve la columna de acciones; un USER solo consulta */
   const getRowActions = (product: Product): RowAction[] => [
+    { label: `Editar ${product.title}`, icon: <EditOutlined fontSize="small" />, onClick: () => setFormTarget({ productId: product._id }) },
     { label: `Eliminar ${product.title}`, icon: <DeleteOutlined fontSize="small" />, onClick: () => requestDelete(product), color: 'error' },
   ];
 
@@ -61,6 +79,13 @@ export const InventoryView = () => {
       <PageHeader
         title="Inventario"
         subtitle={inventory.loading ? 'Cargando productos…' : `${formatNumber(total)} productos activos`}
+        actions={
+          isAdmin && (
+            <Button variant="contained" startIcon={<AddRounded />} onClick={() => setFormTarget({ productId: null })}>
+              Nuevo producto
+            </Button>
+          )
+        }
       />
 
       <Card>
@@ -104,6 +129,15 @@ export const InventoryView = () => {
           />
         )}
       </Card>
+
+      {formTarget && (
+        <ProductFormDialog
+          productId={formTarget.productId}
+          categories={categories}
+          onClose={() => setFormTarget(null)}
+          onSaved={handleSaved}
+        />
+      )}
 
       <ConfirmDialog
         open={productToDelete !== null}

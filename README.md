@@ -153,3 +153,4 @@ src/
 * Paginación, búsqueda por título y rango de fechas se validan **en el servidor** (`offset`, `limit`, `search`, `from`, `to`); se pide solo la página visible.
 * La búsqueda usa *debounce* (400 ms) para no hacer una petición por cada letra.
 * Solo el rol ADMIN ve la columna de acciones. Al eliminar, se pide confirmación y se actualizan el listado y las métricas del dashboard.
+* Al crear producto, la categoría se elige de las existentes (se listan a partir de los productos) o se escribe una nueva.

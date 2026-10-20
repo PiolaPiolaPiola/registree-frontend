@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200" role="img" aria-label="Producto sin imagen">
+  <rect width="200" height="200" rx="28" fill="#EAF6FC"/>
+  <path d="M100 52L146 74V126L100 148L54 126V74Z" fill="#FFFFFF" stroke="#BFE3F6" stroke-width="4" stroke-linejoin="round"/>
+  <path d="M54 74L100 96L146 74M100 96V148" fill="none" stroke="#BFE3F6" stroke-width="4" stroke-linejoin="round"/>
+  <path d="M77 63L123 85" stroke="#BFE3F6" stroke-width="4" stroke-linecap="round"/>
+  <path d="M100 103C108 113 112 119 112 125A12 12 0 1 1 88 125C88 119 92 113 100 103Z" fill="#29A9E1"/>
+  <path d="M95 126A5 5 0 0 0 100 131" fill="none" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" opacity="0.8"/>
+  <text x="100" y="178" text-anchor="middle" font-family="Nunito, 'Segoe UI', sans-serif" font-size="15" font-weight="700" fill="#5B6B7C">Sin imagen</text>
+</svg>
