@@ -115,9 +115,11 @@ src/
 | `/` | Dashboard. Requiere sesión |
 | `/inventario` | Requiere sesión |
 | `/usuarios` | Requiere sesión y rol `ADMIN` |
+| `/registro` | Sin sesión. Crea cuenta y loguea |
 
 * Sin sesión, cualquier ruta (incluso una inexistente) redirige al login. Después de iniciar sesión, se vuelve a la ruta anterior.
 * Con sesión, una ruta inexistente muestra una página 404. Sin permisos, una página 403.
+* Registro público en `/registro`: crea la cuenta con rol USER usando `POST /auth/register` y deja la sesión iniciada. Comparte el diseño del login (`AuthLayout`).
 
 ## Formularios y validaciones
 
