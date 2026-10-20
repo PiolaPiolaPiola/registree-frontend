@@ -59,5 +59,19 @@ export const theme = createTheme({
     },
     MuiDialog: { styleOverrides: { paper: { borderRadius: 'var(--rg-radius-xl)' } } },
     MuiIconButton: { styleOverrides: { root: { borderRadius: 'var(--rg-radius-md)' } } },
+        MuiTableCell: {
+      styleOverrides: {
+        root: { borderColor: '#D6E6F2' },
+        head: {
+          backgroundColor: '#F5FAFD',
+          color: '#5B6B7C',
+          fontSize: '0.8125rem',
+          fontWeight: 800,
+          textTransform: 'uppercase',
+          letterSpacing: '0.04em',
+          whiteSpace: 'nowrap',
+        },
+      },
+    },
   },
 });
