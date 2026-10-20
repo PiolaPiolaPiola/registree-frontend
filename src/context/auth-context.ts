@@ -1,5 +1,5 @@
 import { createContext } from 'react';
-import type { LoginDTO } from '../models/auth.model';
+import type { LoginDTO, RegisterDTO } from '../models/auth.model';
 import type { User } from '../models/user.model';
 
 /**Estado de la sesión:*/
@@ -10,6 +10,8 @@ export interface AuthContextValue {
   status: AuthStatus;
   isAdmin: boolean;
   login: (dto: LoginDTO) => Promise<void>;
+  /** Crea la cuenta como USER por defecto e inicia sesión*/
+  register: (dto: RegisterDTO) => Promise<void>;
   logout: () => void;
 }
 

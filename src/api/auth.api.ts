@@ -1,10 +1,16 @@
 import { http } from './http-client';
-import type { LoginDTO, LoginResponse } from '../models/auth.model';
+import type { LoginDTO, LoginResponse, RegisterDTO } from '../models/auth.model';
 import type { User } from '../models/user.model'
 
 /** POST /auth/login: valida las credenciales y devuelve el token y el usuario */
 export const login = async (dto: LoginDTO): Promise<LoginResponse> => {
   const { data } = await http.post<LoginResponse>('/auth/login', dto);
+  return data;
+};
+
+/** POST /auth/register: crea un usuario con rol USER y devuelve el token y el usuario, igual que el login */
+export const register = async (dto: RegisterDTO): Promise<LoginResponse> => {
+  const { data } = await http.post<LoginResponse>('/auth/register', dto);
   return data;
 };
 

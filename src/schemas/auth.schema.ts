@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import { EMAIL_REGEX } from './patterns';
+import { buildUserFormSchema } from './user.schema';
 
 export const loginSchema = z.object({
   email: z
@@ -13,3 +14,8 @@ export const loginSchema = z.object({
 });
 
 export type LoginFormValues = z.infer<typeof loginSchema>;
+
+/** Se usa para el registro las mismas validaciones del login*/
+export const registerSchema = buildUserFormSchema(false).omit({ role: true });
+
+export type RegisterFormValues = z.infer<typeof registerSchema>;

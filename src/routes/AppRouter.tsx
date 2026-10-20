@@ -2,6 +2,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { RoleRoute } from './RoleRoute';
 import { PATHS } from './paths';
 import { LoginView } from '../views/LoginView';
+import { RegisterView } from '../views/RegisterView';
 import { NotFoundView } from '../views/NotFoundView';
 import { AuthRoute } from './AuthRoute';
 import { AppLayout } from '../components/layout/AppLayout';
@@ -14,6 +15,7 @@ export const AppRouter = () => (
     <Routes>
       <Route element={<AuthRoute access="public" />}>
         <Route path={PATHS.login} element={<LoginView />} />
+        <Route path={PATHS.register} element={<RegisterView />} />
       </Route>
 
       <Route element={<AuthRoute access="private" />}>

@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useState, type ReactNode } from 'react';
 import * as authApi from '../api/auth.api';
 import { setUnauthorizedHandler } from '../api/http-client';
-import type { LoginDTO } from '../models/auth.model';
+import type { LoginDTO, LoginResponse, RegisterDTO } from '../models/auth.model';
 import type { User } from '../models/user.model';
 import { tokenStorage } from '../utils/token-storage';
 import { AuthContext, type AuthContextValue, type AuthStatus } from './auth-context';
@@ -24,13 +24,18 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     setStatus('unauthenticated');
   }, []);
 
-  /** Valida las credenciales, guarda el token y el usuario*/
-  const login = useCallback(async (dto: LoginDTO) => {
-    const { token, user: loggedUser } = await authApi.login(dto);
+  /** Guarda el token y el usuario que devuelven el login y el registro */
+  const startSession = useCallback(({ token, user: loggedUser }: LoginResponse) => {
     tokenStorage.set(token);
     setUser(loggedUser);
     setStatus('authenticated');
   }, []);
+
+  /** Valida las credenciales, guarda el token y el usuario*/
+  const login = useCallback(async (dto: LoginDTO) => startSession(await authApi.login(dto)), [startSession]);
+
+  /** Crea la cuenta y deja la sesión iniciada */
+  const register = useCallback(async (dto: RegisterDTO) => startSession(await authApi.register(dto)), [startSession]);
 
   useEffect(() => {
     setUnauthorizedHandler(logout);
@@ -60,8 +65,8 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   }, []);
 
   const value = useMemo<AuthContextValue>(
-    () => ({ user, status, isAdmin: user?.role === 'ADMIN', login, logout }),
-    [user, status, login, logout],
+    () => ({ user, status, isAdmin: user?.role === 'ADMIN', login, register, logout }),
+    [user, status, login, register, logout],
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
