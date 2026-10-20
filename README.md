@@ -2,12 +2,16 @@
 
 Aplicación web de **Registree**: dashboard gerencial de inventario, desarrollada con **React**, **TypeScript** y **Material UI**. Consume la API REST de [registree-backend](https://github.com/PiolaPiolaPiola/registree-backend).
 
+> **¿Solo quieres levantar el proyecto?** Sigue la [guía rápida](GUIA-RAPIDA.md): backend, base de datos y frontend en pocos pasos, con las credenciales de prueba.
+>
+> **Casos de prueba:** [docs/CASOS-DE-PRUEBA.md](docs/CASOS-DE-PRUEBA.md), ejecutados de punta a punta desde el frontend contra la API.
+
 ---
 
 ## Requisitos previos
 
 * Node.js v24 LTS
-* API de [registree-backend](https://github.com/PiolaPiolaPiola/registree-backend) corriendo (por defecto en `http://localhost:3000/api`)
+* API de [registree-backend](https://github.com/PiolaPiolaPiola/registree-backend) corriendo (por defecto en `http://localhost:3000/api`), con el seed ejecutado (`npm run seed`) para tener usuarios y productos de prueba
 
 ---
 
@@ -38,7 +42,9 @@ cp .env.example .env
 ```bash
 npm run dev
 ```
-La aplicación queda disponible en `http://localhost:5173`. 
+La aplicación queda disponible en `http://localhost:5173`. Ingresar con las credenciales de prueba del backend: `admin@registree.com` / `Admin12345` (ADMIN) o `user@registree.com` / `User12345` (USER).
+
+> El backend solo acepta peticiones desde `http://localhost:5173` (`CORS_ORIGIN`). Si el frontend corre en otro puerto, actualizar esa variable en el `.env` del backend.
 
 * Compilar y previsualizar la versión de producción:
 ```bash
@@ -106,6 +112,8 @@ src/
 * La sesión se maneja con un Context de React (`AuthProvider`) que guarda el usuario autenticado y su rol durante toda la aplicación. Se accede con el hook `useAuth`.
 * El token se guarda en `localStorage` para mantener la sesión al recargar la página. Al abrir la app, el token se valida con `GET /auth/me`, que devuelve los datos actualizados del usuario.
 * Si el token expira o el usuario es inactivado, la siguiente petición responde `401` y la sesión se cierra automáticamente.
+* Al cerrar sesión con el botón, el siguiente ingreso empieza en el dashboard. Si la sesión expiró (`401`), al volver a ingresar se regresa a la ruta en la que estaba.
+* Si la actualización de las métricas falla, el dashboard conserva los datos anteriores y muestra *"Sin conexión · datos de las HH:MM"*.
 
 ## Rutas
 
@@ -125,21 +133,23 @@ src/
 
 * Los formularios usan **React Hook Form** con **Zod** (`src/schemas/`), y validan en tiempo real mientras el usuario escribe (zod).
 * Las reglas de validación son las mismas de los schemas de backend, para que ambos acepten exactamente los mismos datos.
-* Los campos reutilizables (`FormTextField`, `FormPasswordField`) conectan los componentes de MUI con el formulario y muestran los errores debajo de cada campo.
+* Los campos reutilizables (`FormTextField`, `FormPasswordField`, `FormSelectField`, `FormAutocompleteField`) conectan los componentes de MUI con el formulario y muestran los errores debajo de cada campo. Los obligatorios llevan asterisco.
+* `FormDialog` es el modal genérico de formularios: lo reutilizan productos y usuarios, y tiene un modo de solo lectura para ver el detalle.
 
 ## Feedback al usuario
 
 * **Notificaciones (toast):** componente propio (`ToastProvider` + hook `useToast`) para mensajes de éxito, error e información. Se acumulan máximo 3 y se cierran solas.
 * **Confirmación:** `ConfirmDialog`, un modal de confirmación reutilizable al estilo Sweet Alert para acciones como eliminar un producto o inactivar un usuario.
-* **Estados:** `StatusView` muestra imagenespor defecto para estados vacíos, la página 404 y el acceso no permitido. `FullScreenLoader` muestra el spinner mientras se carga.
-* **Indicadores de carga:** en local la API responde tan rápido que los spinners casi no se ven. Para revisarlos, define `VITE_API_DELAY_MS=1500` en el `.env` y reinicia `npm run dev`. Probar recardando la página
+* **Estados:** `StatusView` muestra imágenes por defecto para estados vacíos, la página 404 y el acceso no permitido. `FullScreenLoader` muestra el spinner mientras se carga.
+* **Indicadores de carga:** en local la API responde tan rápido que los spinners casi no se ven. Para revisarlos, define `VITE_API_DELAY_MS=1500` en el `.env`, reinicia `npm run dev` y recarga la página
 
 ## Layout
 
 * Menú lateral con las secciones disponibles según el rol. Usuarios solo lo ve ADMIN.
-* El menú se puede **fijar abierto** o dejar contraídocon solo los íconos. Contraído, se expande al pasar el mouse o al navegar con el teclado, sin mover el contenido. La preferencia se recuerda en el navegador.
+* El menú se puede **fijar abierto** o dejar contraído con solo los íconos. Contraído, se expande al pasar el mouse o al navegar con el teclado, sin mover el contenido. La preferencia se recuerda en el navegador.
 * En celular, el menú se abre como panel desde el botón del header.
 * El header muestra el usuario, su rol y la opción de cerrar sesión.
+* El logo del menú lleva al inicio (dashboard). Para el ADMIN, el perfil del header lleva a la administración de usuarios.
 
 ## Datos compartidos del dashboard
 
@@ -148,18 +158,23 @@ src/
 * Después de crear, editar o eliminar un producto, la caché se actualiza. Si la actualización falla, se conservan los datos anteriores.
 * Las métricas se calculan en `src/services/metrics.service.ts` con `reduce`, `map`, `filter` y `sort`, como funciones puras y sin filtrado desde bd.
 * El **valor total del inventario** es la suma de `precio × stock` de cada producto, calculada con `decimal.js` para evitar errores de precisión con los centavos.
-* Los gráficos usan **Recharts**: una dona con la proporción de productos por categoría y barras con el top 5 de productos más caros. Los colores están validados para daltonismo
+* Los gráficos usan **Recharts**: una dona con la proporción de productos por categoría y barras con el top 5 de productos más caros. Los colores están validados para daltonismo.
 * La actividad reciente usa `DataTable`, la tabla genérica del proyecto: recibe columnas, acciones y paginación como props, y la reutilizan el dashboard, el inventario y la administración de usuarios. Siempre reserva el alto de 5 filas para que el diseño no salte.
 * La dona muestra todas las categorías (tooltip con nombre, cantidad y porcentaje). La leyenda lista las 5 con más productos y agrupa el resto en "Otras", con un tooltip que muestra cuáles son.
+* Las tarjetas se pueden expandir para ver el detalle (estado del stock, unidades por categoría). El detalle de la categoría líder muestra las 5 categorías con más unidades, para que la tarjeta no crezca.
 
 ### Inventario
 * Paginación, búsqueda por título y rango de fechas se validan **en el servidor** (`offset`, `limit`, `search`, `from`, `to`); se pide solo la página visible.
 * La búsqueda usa *debounce* (400 ms) para no hacer una petición por cada letra.
-* Solo el rol ADMIN ve la columna de acciones. Al eliminar, se pide confirmación y se actualizan el listado y las métricas del dashboard.
+* Todos los roles pueden **ver el detalle** de un producto (👁): reutiliza el formulario en modo solo lectura y permite abrir cada imagen en una pestaña nueva.
+* Solo el ADMIN puede **crear, editar y eliminar**. Al eliminar, se pide confirmación y se actualizan el listado y las métricas del dashboard.
+* Al editar, los datos se piden a la API (`GET /products/:id`). El mismo formulario sirve para crear y editar.
 * Al crear producto, la categoría se elige de las existentes (se listan a partir de los productos) o se escribe una nueva.
-* Hasta 4 imágenes por producto se puede cargar. Cada URL tiene vista previa y, si no carga, se muestra una imagen por defecto. La primera siempre será la principal
+* Se pueden cargar hasta 4 imágenes por producto (`images` es un arreglo en la API). Cada URL tiene vista previa y, si no carga, se muestra una imagen por defecto. La primera es la principal.
+* Mientras una acción está en curso (modal abierto, guardando o recargando la tabla), los botones de acciones se deshabilitan para evitar dobles clics.
 
 ### Administración de usuarios
 * Solo permitido al ADMIN. Reutiliza `DataTable`, `FormDialog` y `ConfirmDialog`: tabla paginada con filtro Activos/Inactivos (parámetro `active` de la API).
 * Se puede crear, editar (nombre, email, rol y contraseña opcional) e inactivar o reactivar sin eliminar.
 * Un ADMIN no puede inactivarse ni cambiar su propio rol: los controles se deshabilitan y el backend también lo valida.
+* Igual que en el inventario, las acciones se deshabilitan mientras otra está en curso.
