@@ -14,6 +14,8 @@ interface DataTableProps<T> {
   ariaLabel: string;
   /** Si se envía, se agrega al final la columna "Acciones" con los botones de cada fila */
   getRowActions?: (row: T) => RowAction[];
+  /** Deshabilita las acciones de todas las filas mientras una acción está en curso, para evitar dobles clics o acciones sobre datos viejos */
+  actionsDisabled?: boolean;
   /** Si se envía, se muestra la paginación debajo de la tabla */
   pagination?: TablePaginationConfig;
   loading?: boolean;
@@ -34,6 +36,7 @@ export const DataTable = <T,>({
   getRowId,
   ariaLabel,
   getRowActions,
+  actionsDisabled = false,
   pagination,
   loading = false,
   refreshing = false,
@@ -80,7 +83,7 @@ export const DataTable = <T,>({
             ))}
             {getRowActions && (
               <TableCell align="right">
-                <RowActions actions={getRowActions(row)} />
+                <RowActions actions={getRowActions(row)} disabled={actionsDisabled} />
               </TableCell>
             )}
           </TableRow>

@@ -121,6 +121,8 @@ export const InventoryView = () => {
             rows={rows}
             getRowId={(product) => product._id}
             getRowActions={getRowActions}
+            // Bloqueadas desde que se abre un modal hasta que la tabla termina de recargarse
+            actionsDisabled={formTarget !== null || productToDelete !== null || deleting || inventory.refreshing}
             loading={inventory.loading}
             refreshing={inventory.refreshing}
             emptyState={emptyState}

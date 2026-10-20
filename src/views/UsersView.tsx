@@ -102,6 +102,8 @@ export const UsersView = () => {
             rows={rows}
             getRowId={(user) => user._id}
             getRowActions={getRowActions}
+            // Bloqueadas desde que se abre un modal hasta que la tabla termina de recargarse
+            actionsDisabled={formTarget !== null || userToToggle !== null || saving || users.refreshing}
             loading={users.loading}
             refreshing={users.refreshing}
             minWidth={760}

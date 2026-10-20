@@ -14,7 +14,7 @@ export const USER_COLUMNS: DataTableColumn<User>[] = [
         <Avatar sx={{ width: 34, height: 34, fontSize: 14, fontWeight: 800, bgcolor: 'secondary.main', color: 'secondary.contrastText' }}>
           {getInitials(user.name)}
         </Avatar>
-        <Typography sx={{ fontWeight: 700, maxWidth: { xs: 160, lg: 220 } }} noWrap title={user.name}>
+        <Typography sx={{ fontWeight: 700, maxWidth: { xs: 140, lg: 180, xl: 220 } }} noWrap title={user.name}>
           {user.name}
         </Typography>
       </Stack>
