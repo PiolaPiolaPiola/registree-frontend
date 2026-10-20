@@ -70,7 +70,6 @@ export const ProductFiltersBar = ({
         sx={{ width: { xs: '100%', md: 220 } }}
       />
     </Stack>
-    {hasFilters && (
         <Button
         variant="text"
         startIcon={<FilterAltOffOutlined />}
@@ -81,6 +80,5 @@ export const ProductFiltersBar = ({
         >
         Limpiar filtros
         </Button>
-    )}
   </Stack>
 );
