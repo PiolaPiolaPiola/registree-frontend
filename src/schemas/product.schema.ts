@@ -9,6 +9,7 @@ export const PRODUCT_LIMITS = {
   priceMin: 0.01,
   priceMax: 1_000_000,
   stockMax: 1_000_000,
+  imagesMax: 4,
 } as const;
 
 const PRICE_REGEX = /^\d+([.,]\d{1,2})?$/;
@@ -48,10 +49,16 @@ export const productFormSchema = z.object({
     .min(1, 'El stock es obligatorio')
     .regex(INTEGER_REGEX, 'El stock debe ser un número entero, sin decimales ni signos')
     .refine((value) => Number(value) <= PRODUCT_LIMITS.stockMax, 'El stock es demasiado alto'),
-  imageUrl: z
-    .string()
-    .trim()
-    .refine((value) => value === '' || IMAGE_URL_REGEX.test(value), 'Ingresa una URL válida que empiece por http:// o https://'),
+  images: z
+    .array(
+      z.object({
+        url: z
+          .string()
+          .trim()
+          .refine((value) => value === '' || IMAGE_URL_REGEX.test(value), 'Ingresa una URL válida que empiece por http:// o https://'),
+      }),
+    )
+    .max(PRODUCT_LIMITS.imagesMax, `Se permiten máximo ${PRODUCT_LIMITS.imagesMax} imágenes`),
 });
 
 export type ProductFormValues = z.infer<typeof productFormSchema>;

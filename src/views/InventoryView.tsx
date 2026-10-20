@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react';
 import { Button, Card } from '@mui/material';
-import { AddRounded, DeleteOutlined, EditOutlined } from '@mui/icons-material';
+import { AddRounded, DeleteOutlined, EditOutlined, VisibilityOutlined } from '@mui/icons-material';
 import { PageHeader } from '../components/layout/PageHeader';
 import { StatusView } from '../components/feedback/StatusView';
 import { ConfirmDialog } from '../components/feedback/ConfirmDialog';
@@ -24,7 +24,7 @@ export const InventoryView = () => {
   const inventory = useInventory();
   const { rows, total, pagination, filters } = inventory;
   /** null: modal cerrado. productId null: crear; con id: editar */
-  const [formTarget, setFormTarget] = useState<{ productId: string | null } | null>(null);
+  const [formTarget, setFormTarget] = useState<{ productId: string | null; readOnly?: boolean } | null>(null);
 
   /** Categorías existentes (sin repetir) para sugerirlas en el formulario */
   const categories = useMemo(
@@ -51,8 +51,14 @@ export const InventoryView = () => {
 
   const { productToDelete, deleting, requestDelete, cancelDelete, confirmDelete } = useProductDelete(handleDeleted);
 
-  /** Solo ADMIN ve la columna de acciones; un USER solo consulta */
+  /** Ver detalle está disponible para todos los roles.Editar y eliminar, solo para ADMIN */
   const getRowActions = (product: Product): RowAction[] => [
+    { label: `Ver detalle de ${product.title}`, icon: <VisibilityOutlined fontSize="small" />, onClick: () => setFormTarget({ productId: product._id, readOnly: true }) },
+    ...(isAdmin ? getAdminActions(product) : []),
+  ];
+
+  /** Editar y eliminar: solo ADMIN */
+  const getAdminActions = (product: Product): RowAction[] => [
     { label: `Editar ${product.title}`, icon: <EditOutlined fontSize="small" />, onClick: () => setFormTarget({ productId: product._id }) },
     { label: `Eliminar ${product.title}`, icon: <DeleteOutlined fontSize="small" />, onClick: () => requestDelete(product), color: 'error' },
   ];
@@ -114,7 +120,7 @@ export const InventoryView = () => {
             columns={INVENTORY_PRODUCT_COLUMNS}
             rows={rows}
             getRowId={(product) => product._id}
-            getRowActions={isAdmin ? getRowActions : undefined}
+            getRowActions={getRowActions}
             loading={inventory.loading}
             refreshing={inventory.refreshing}
             emptyState={emptyState}
@@ -133,6 +139,7 @@ export const InventoryView = () => {
       {formTarget && (
         <ProductFormDialog
           productId={formTarget.productId}
+          readOnly={formTarget.readOnly}
           categories={categories}
           onClose={() => setFormTarget(null)}
           onSaved={handleSaved}

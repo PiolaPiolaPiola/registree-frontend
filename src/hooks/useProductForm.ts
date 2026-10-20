@@ -1,13 +1,13 @@
 import { useEffect, useState } from 'react';
-import { useForm, useWatch } from 'react-hook-form';
+import { useFieldArray, useForm, useWatch } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { createProduct, getProductById, updateProduct } from '../api/products.api';
 import { toApiError } from '../api/api-error';
 import type { CreateProductDTO, Product } from '../models/product.model';
-import { parsePrice, productFormSchema, type ProductFormValues } from '../schemas/product.schema';
+import { PRODUCT_LIMITS, parsePrice, productFormSchema, type ProductFormValues } from '../schemas/product.schema';
 import { useToast } from './useToast';
 
-const EMPTY_VALUES: ProductFormValues = { title: '', description: '', category: '', price: '', stock: '', imageUrl: '' };
+const EMPTY_VALUES: ProductFormValues = { title: '', description: '', category: '', price: '', stock: '', images: [{ url: '' }] };
 
 /** Unifica los espacios dobles*/
 const normalizeText = (value: string): string => value.trim().replace(/\s+/g, ' ');
@@ -18,21 +18,17 @@ const toFormValues = (product: Product): ProductFormValues => ({
   category: product.category,
   price: String(product.price).replace('.', ','),
   stock: String(product.stock),
-  imageUrl: product.images[0] ?? '',
+  images: product.images.length > 0 ? product.images.map((url) => ({ url })) : [{ url: '' }], //Se pueden cargar varias imagenes
 });
 
-/**La imagen del formulario es la principal.*/
-const toProductDTO = (values: ProductFormValues, original: Product | null): CreateProductDTO => {
-  const otherImages = original?.images.slice(1) ?? [];
-  return {
-    title: normalizeText(values.title),
-    description: normalizeText(values.description),
-    category: normalizeText(values.category),
-    price: parsePrice(values.price),
-    stock: Number(values.stock),
-    images: values.imageUrl ? [values.imageUrl, ...otherImages] : otherImages,
-  };
-};
+const toProductDTO = (values: ProductFormValues): CreateProductDTO => ({
+  title: normalizeText(values.title),
+  description: normalizeText(values.description),
+  category: normalizeText(values.category),
+  price: parsePrice(values.price),
+  stock: Number(values.stock),
+  images: values.images.map((image) => image.url.trim()).filter((url) => url !== ''),
+});
 
 type LoadState = { status: 'loading' } | { status: 'ready'; product: Product | null } | { status: 'error'; message: string };
 
@@ -48,7 +44,13 @@ export const useProductForm = (productId: string | null, onSaved: (product: Prod
     defaultValues: EMPTY_VALUES,
   });
 
-  const imageUrl = useWatch({ control, name: 'imageUrl' });
+  /** Filas de imágenes: agregar y quitar URLs */
+  const imageFields = useFieldArray({ control, name: 'images' });
+  const imageUrls = useWatch({ control, name: 'images' }).map((image) => image.url);
+
+  const addImage = () => {
+    if (imageFields.fields.length < PRODUCT_LIMITS.imagesMax) imageFields.append({ url: '' });
+  };
 
   useEffect(() => {
     if (!productId) return;
@@ -73,7 +75,7 @@ export const useProductForm = (productId: string | null, onSaved: (product: Prod
     if (loadState.status !== 'ready') return;
     setSubmitErrors([]);
     try {
-      const dto = toProductDTO(values, loadState.product);
+      const dto = toProductDTO(values);
       const saved = loadState.product ? await updateProduct(loadState.product._id, dto) : await createProduct(dto);
       showSuccess(isEdit ? `"${saved.title}" se actualizó` : `"${saved.title}" se creó en el inventario`);
       onSaved(saved);
@@ -91,6 +93,10 @@ export const useProductForm = (productId: string | null, onSaved: (product: Prod
     isSubmitting: formState.isSubmitting,
     loadState,
     submitErrors,
-    imageUrl,
+    imageFields: imageFields.fields,
+    imageUrls,
+    addImage,
+    removeImage: imageFields.remove,
+    canAddImage: imageFields.fields.length < PRODUCT_LIMITS.imagesMax,
   };
 };
