@@ -1,7 +1,8 @@
-import { Box, Stack, Typography } from '@mui/material';
+import { Box, Stack, Tooltip as MuiTooltip, Typography } from '@mui/material';
+import { InfoOutlined } from '@mui/icons-material';
 import { Cell, Pie, PieChart, ResponsiveContainer, Tooltip } from 'recharts';
 import type { CategorySummary } from '../../../models/metrics.model';
-import { getCategoryColor } from '../../../styles/chart-colors';
+import { CHART_COLORS, OTHER_COLOR, OTHER_SHADES, getCategoryColor } from '../../../styles/chart-colors';
 import { formatNumber, formatPercent } from '../../../utils/format';
 
 interface CategoryDonutChartProps {
@@ -12,17 +13,47 @@ interface CategoryDonutChartProps {
   legendPosition?: 'bottom' | 'right';
 }
 
-/** Gráfico de dona con proporción de productos por categoría, con leyenda que muestra cantidad y porcentaje */
+/** Porción de la dona: una por categoría */
+interface Slice {
+  name: string;
+  value: number;
+  color: string;
+  /** true si la categoría está agrupada en Otras dentro del tooltip */
+  grouped: boolean;
+}
+
+/**
+ * La dona muestra todas las categorías. Si no caben se listan en el tooltip
+ * para que la tarjeta no crezca sin límite.
+ */
 export const CategoryDonutChart = ({ categories, height = 220, legendPosition = 'bottom' }: CategoryDonutChartProps) => {
   const totalProducts = categories.reduce((total, category) => total + category.productCount, 0);
-  const names = categories.map((category) => category.category);
-  const data = categories.map((category) => ({
-    name: category.category,
-    value: category.productCount,
-    color: getCategoryColor(category.category, names),
-  }));
+  const percentOf = (value: number) => formatPercent(totalProducts ? value / totalProducts : 0);
 
-  const summary = data.map((item) => `${item.name}: ${item.value}`).join(', ');
+  // las que queden como otras, se ven de color gris
+  const hasOthers = categories.length > CHART_COLORS.length;
+  const visible = hasOthers ? categories.slice(0, CHART_COLORS.length - 1) : categories;
+  const others = hasOthers ? categories.slice(CHART_COLORS.length - 1) : [];
+  const names = visible.map((category) => category.category);
+  const othersTotal = others.reduce((total, category) => total + category.productCount, 0);
+
+  const slices: Slice[] = [
+    ...visible.map((category) => ({
+      name: category.category,
+      value: category.productCount,
+      color: getCategoryColor(category.category, names),
+      grouped: false,
+    })),
+    // Dos grises diferentes por si dos categorías de otras quedan juntas en la gráfica 
+    ...others.map((category, index) => ({
+      name: category.category,
+      value: category.productCount,
+      color: OTHER_SHADES[index % OTHER_SHADES.length],
+      grouped: true,
+    })),
+  ];
+
+  const summary = slices.map((slice) => `${slice.name}: ${slice.value}`).join(', ');
 
   return (
     <Stack direction={legendPosition === 'right' ? { xs: 'column', sm: 'row' } : 'column'} spacing={3} sx={{ alignItems: 'center' }}>
@@ -34,7 +65,7 @@ export const CategoryDonutChart = ({ categories, height = 220, legendPosition = 
         <ResponsiveContainer width="100%" height="100%">
           <PieChart>
             <Pie
-              data={data}
+              data={slices}
               dataKey="value"
               nameKey="name"
               innerRadius="62%"
@@ -43,14 +74,29 @@ export const CategoryDonutChart = ({ categories, height = 220, legendPosition = 
               strokeWidth={2}
               isAnimationActive={false}
             >
-              {data.map((item) => (
-                <Cell key={item.name} fill={item.color} />
+              {slices.map((slice) => (
+                <Cell key={slice.name} fill={slice.color} />
               ))}
             </Pie>
             <Tooltip
-              formatter={(value) => [`${formatNumber(Number(value))} productos`, '']}
-              separator=""
-              contentStyle={{ borderRadius: 12, border: '1px solid #D6E6F2', fontWeight: 700 }}
+              wrapperStyle={{ zIndex: 2 }}
+              content={({ active, payload }) => {
+                const slice = payload?.[0]?.payload as Slice | undefined;
+                if (!active || !slice) return null;
+                return (
+                  <Box sx={{ bgcolor: 'background.paper', border: '1px solid #D6E6F2', borderRadius: '12px', px: 1.5, py: 1, boxShadow: 'var(--rg-shadow-card)' }}>
+                    <Typography sx={{ fontWeight: 800 }}>{slice.name}</Typography>
+                    <Typography variant="body2" sx={{ fontWeight: 700 }}>
+                      {formatNumber(slice.value)} {slice.value === 1 ? 'producto' : 'productos'} · {percentOf(slice.value)}
+                    </Typography>
+                    {slice.grouped && (
+                      <Typography variant="caption" sx={{ color: 'text.secondary' }}>
+                        Agrupada en "Otras"
+                      </Typography>
+                    )}
+                  </Box>
+                );
+              }}
             />
           </PieChart>
         </ResponsiveContainer>
@@ -63,17 +109,49 @@ export const CategoryDonutChart = ({ categories, height = 220, legendPosition = 
       </Box>
 
       <Stack component="ul" spacing={1.25} sx={{ listStyle: 'none', m: 0, p: 0, width: '100%', minWidth: 0 }}>
-        {data.map((item) => (
-          <Stack component="li" key={item.name} direction="row" spacing={1.25} sx={{ alignItems: 'center' }}>
-            <Box sx={{ width: 12, height: 12, borderRadius: '4px', bgcolor: item.color, flex: 'none' }} aria-hidden />
-            <Typography sx={{ flex: 1, fontWeight: 700, minWidth: 0 }} noWrap>
-              {item.name}
-            </Typography>
+        {slices
+          .filter((slice) => !slice.grouped)
+          .map((slice) => (
+            <Stack component="li" key={slice.name} direction="row" spacing={1.25} sx={{ alignItems: 'center' }}>
+              <Box sx={{ width: 12, height: 12, borderRadius: '4px', bgcolor: slice.color, flex: 'none' }} aria-hidden />
+              <Typography sx={{ flex: 1, fontWeight: 700, minWidth: 0 }} noWrap>
+                {slice.name}
+              </Typography>
+              <Typography variant="body2" sx={{ fontWeight: 700, whiteSpace: 'nowrap' }}>
+                {formatNumber(slice.value)} · {percentOf(slice.value)}
+              </Typography>
+            </Stack>
+          ))}
+        {hasOthers && (
+          <Stack component="li" direction="row" spacing={1.25} sx={{ alignItems: 'center' }}>
+            <Box sx={{ width: 12, height: 12, borderRadius: '4px', bgcolor: OTHER_COLOR, flex: 'none' }} aria-hidden />
+            <Stack direction="row" spacing={0.5} sx={{ flex: 1, minWidth: 0, alignItems: 'center' }}>
+              <Typography sx={{ fontWeight: 700 }} noWrap>
+                Otras ({others.length})
+              </Typography>
+              <MuiTooltip
+                title={
+                  <Stack component="ul" spacing={0.25} sx={{ listStyle: 'none', m: 0, p: 0 }}>
+                    {others.map((category) => (
+                      <li key={category.category}>
+                        {category.category}: {formatNumber(category.productCount)} · {percentOf(category.productCount)}
+                      </li>
+                    ))}
+                  </Stack>
+                }
+              >
+                <InfoOutlined
+                  tabIndex={0}
+                  aria-label={`Categorías agrupadas en Otras: ${others.map((category) => category.category).join(', ')}`}
+                  sx={{ fontSize: 18, color: 'text.secondary', cursor: 'help' }}
+                />
+              </MuiTooltip>
+            </Stack>
             <Typography variant="body2" sx={{ fontWeight: 700, whiteSpace: 'nowrap' }}>
-              {formatNumber(item.value)} · {formatPercent(totalProducts ? item.value / totalProducts : 0)}
+              {formatNumber(othersTotal)} · {percentOf(othersTotal)}
             </Typography>
           </Stack>
-        ))}
+        )}
       </Stack>
     </Stack>
   );
