@@ -10,6 +10,7 @@ const titleColumn: DataTableColumn<Product> = {
   header: 'Título',
   render: (product) => (
     <Typography sx={{ fontWeight: 700, maxWidth: { xs: 180, lg: 200, xl: 280 } }} noWrap title={product.title}>
+      {product.title}
     </Typography>
   ),
 };
