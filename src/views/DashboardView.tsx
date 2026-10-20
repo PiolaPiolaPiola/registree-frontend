@@ -19,13 +19,16 @@ import { TopPricesBarChart } from '../components/dashboard/charts/TopPricesBarCh
 import { DataTable } from '../components/table/DataTable';
 import { RECENT_PRODUCT_COLUMNS } from '../components/products/product-columns';
 
+/** Máximo categorías que se muestran en el detalle de la categoría líder */
+const TOP_STOCK_CATEGORIES = 5;
+
 export const DashboardView = () => {
   const { metrics, topExpensive, recentProducts, status, isRefreshing, error, lastUpdated, refresh } = useDashboardMetrics();  const [expandedId, setExpandedId] = useState<DashboardCardId | null>(null);
 
   const toggleCard = (id: DashboardCardId) => setExpandedId((current) => (current === id ? null : id));
 
   if (status === 'loading') {
-    return <LoadingState message="Cargando métricas…" />;
+    return <LoadingState message="Cargando métricas…" minHeight="calc(100vh - 180px)" />;
   }
 
   if (status === 'error') {
@@ -53,7 +56,12 @@ export const DashboardView = () => {
   }
 
   const { stock, leadingCategory } = metrics;
-  const stockByCategory = [...metrics.categories].sort((a, b) => b.totalStock - a.totalStock);
+  // Solo las 5 con más unidades,para que la tarjeta no crezca
+  const stockByCategory = [...metrics.categories].sort((a, b) => b.totalStock - a.totalStock).slice(0, TOP_STOCK_CATEGORIES);
+  const stockTitle =
+    metrics.categories.length > TOP_STOCK_CATEGORIES
+      ? `Top ${TOP_STOCK_CATEGORIES} de ${metrics.categories.length} categorías por unidades en stock`
+      : 'Unidades en stock por categoría';
 
   return (
     <>
@@ -125,7 +133,7 @@ export const DashboardView = () => {
           sx={getCardGridSx('leadingCategory', expandedId)}
           details={
             <ProgressList
-              title="Unidades en stock por categoría"
+              title={stockTitle}
               items={stockByCategory.map((category) => ({
                 label: category.category,
                 value: category.totalStock,
