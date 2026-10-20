@@ -148,3 +148,8 @@ src/
 * El **valor total del inventario** es la suma de `precio × stock` de cada producto, calculada con `decimal.js` para evitar errores de precisión con los centavos.
 * Los gráficos usan **Recharts**: una dona con la proporción de productos por categoría y barras con el top 5 de productos más caros. Los colores están validados para daltonismo
 * La actividad reciente usa `DataTable`, la tabla genérica del proyecto: recibe columnas, acciones y paginación como props, y la reutilizan el dashboard, el inventario y la administración de usuarios. Siempre reserva el alto de 5 filas para que el diseño no salte.
+
+### Inventario
+* Paginación, búsqueda por título y rango de fechas se validan **en el servidor** (`offset`, `limit`, `search`, `from`, `to`); se pide solo la página visible.
+* La búsqueda usa *debounce* (400 ms) para no hacer una petición por cada letra.
+* Solo el rol ADMIN ve la columna de acciones. Al eliminar, se pide confirmación y se actualizan el listado y las métricas del dashboard.
