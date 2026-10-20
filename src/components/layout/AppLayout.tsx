@@ -5,6 +5,7 @@ import { useSidebarPin } from '../../hooks/useSidebarPin';
 import { AppHeader } from './AppHeader';
 import { Sidebar } from './Sidebar';
 import { SidebarContent } from './SidebarContent';
+import { ProductsDataProvider } from '../../context/ProductsDataProvider';
 
 export const AppLayout = () => {
   const { pinned, togglePinned } = useSidebarPin();
@@ -41,7 +42,9 @@ export const AppLayout = () => {
       >
         <AppHeader onOpenMenu={() => setMobileMenuOpen(true)} />
         <Box component="main" sx={{ px: { xs: 2, md: 4 }, pb: 5 }}>
-          <Outlet />
+        <ProductsDataProvider>
+            <Outlet />
+        </ProductsDataProvider>
         </Box>
       </Box>
     </Box>
