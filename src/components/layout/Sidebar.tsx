@@ -9,12 +9,26 @@ interface SidebarProps {
 
 export const Sidebar = ({ pinned, onTogglePinned }: SidebarProps) => {
   const [hovered, setHovered] = useState(false);
-  const expanded = pinned || hovered;
+  // Justo después de contraer, el mouse sigue encima: se ignora el hover hasta que salga del menú
+  const [hoverLocked, setHoverLocked] = useState(false);
+  const expanded = pinned || (hovered && !hoverLocked);
 
-  /** Contrae el menú si no hay hoover*/
+  const handleTogglePinned = () => {
+    if (pinned) {
+      setHoverLocked(true);
+    }
+    onTogglePinned();
+  };
+
+  /** Al salir del menú con el mouse se contrae y el hover vuelve a funcionar */
+  const resetHover = () => {
+    setHovered(false);
+    setHoverLocked(false);
+  };
+
   const handleBlur = (event: FocusEvent<HTMLElement>) => {
     if (!event.currentTarget.contains(event.relatedTarget)) {
-      setHovered(false);
+      resetHover();
     }
   };
 
@@ -22,7 +36,7 @@ export const Sidebar = ({ pinned, onTogglePinned }: SidebarProps) => {
     <Box
       component="aside"
       onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
+      onMouseLeave={resetHover}
       onFocus={() => setHovered(true)}
       onBlur={handleBlur}
       sx={{
@@ -38,11 +52,10 @@ export const Sidebar = ({ pinned, onTogglePinned }: SidebarProps) => {
         overflow: 'hidden',
         bgcolor: 'primary.main',
         color: 'primary.contrastText',
-        borderRadius: '0 28px 28px 0',
-        boxShadow: !pinned && hovered ? 'var(--rg-shadow-floating)' : 'none',
+        boxShadow: !pinned && expanded ? 'var(--rg-shadow-floating)' : 'none',
       }}
     >
-      <SidebarContent expanded={expanded} pinned={pinned} onTogglePinned={onTogglePinned} />
+      <SidebarContent expanded={expanded} pinned={pinned} onTogglePinned={handleTogglePinned} />
     </Box>
   );
 };

@@ -25,7 +25,6 @@ export const AppLayout = () => {
               width: 'var(--rg-sidebar-width)',
               bgcolor: 'primary.main',
               color: 'primary.contrastText',
-              borderRadius: '0 28px 28px 0',
             },
           },
         }}
