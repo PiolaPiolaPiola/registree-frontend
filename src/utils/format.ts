@@ -26,3 +26,8 @@ export const formatDate = (isoDate: string): string => dayjs(isoDate).locale('es
 
 /** Hora corta en español: "10:24 a. m." */
 export const formatTime = (date: Date): string => dayjs(date).locale('es').format('h:mm a');
+
+const percentFormatter = new Intl.NumberFormat('es-CO', { style: 'percent', maximumFractionDigits: 1 });
+
+/** Porcentaje a partir de una fracción: 0.356 → "35,6 %" */
+export const formatPercent = (fraction: number): string => percentFormatter.format(fraction)
