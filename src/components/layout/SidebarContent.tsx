@@ -1,6 +1,6 @@
-import { Box, IconButton, List, ListItemButton, ListItemText, Stack, Tooltip, Typography } from '@mui/material';
+import { Box, ButtonBase, IconButton, List, ListItemButton, ListItemText, Stack, Tooltip, Typography } from '@mui/material';
 import { KeyboardDoubleArrowLeftRounded, KeyboardDoubleArrowRightRounded } from '@mui/icons-material';
-import { NavLink } from 'react-router-dom';
+import { Link as RouterLink, NavLink } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
 import { PATHS } from '../../routes/paths';
 import { NAV_ITEMS } from './nav-items';
@@ -24,8 +24,14 @@ export const SidebarContent = ({ expanded, pinned = false, onTogglePinned, onNav
   return (
     <Stack sx={{ height: '100%', py: 3, px: 1.5, gap: 3 }}>
       <Stack direction="row" spacing={1.5} sx={{ alignItems: 'center', px: 0.75 }}>
-        <Box
+        {/* El logo lleva al inicio (dashboard) */}
+        <ButtonBase
+          component={RouterLink}
+          to={PATHS.dashboard}
+          onClick={onNavigate}
+          aria-label="Ir al inicio"
           sx={{
+            '&:focus-visible': { outline: '2px solid', outlineColor: 'secondary.main', outlineOffset: 2 },
             width: 48,
             height: 48,
             flex: 'none',
@@ -37,7 +43,7 @@ export const SidebarContent = ({ expanded, pinned = false, onTogglePinned, onNav
           }}
         >
           <Box component="img" src={logo} alt="" sx={{ width: 38, height: 38 }} />
-        </Box>
+        </ButtonBase>
         {expanded && (
           <Box sx={{ minWidth: 0 }}>
             <Typography sx={{ fontSize: 22, fontWeight: 800, lineHeight: 1.1 }}>Registree</Typography>
