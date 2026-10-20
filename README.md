@@ -146,3 +146,4 @@ src/
 * Después de crear, editar o eliminar un producto, la caché se actualiza. Si la actualización falla, se conservan los datos anteriores.
 * Las métricas se calculan en `src/services/metrics.service.ts` con `reduce`, `map`, `filter` y `sort`, como funciones puras y sin filtrado desde bd.
 * El **valor total del inventario** es la suma de `precio × stock` de cada producto, calculada con `decimal.js` para evitar errores de precisión con los centavos.
+* Los gráficos usan **Recharts**: una dona con la proporción de productos por categoría y barras con el top 5 de productos más caros. Los colores están validados para daltonismo
